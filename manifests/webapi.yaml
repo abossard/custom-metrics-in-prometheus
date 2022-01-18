@@ -26,11 +26,31 @@ apiVersion: v1
 kind: Service
 metadata:
   name: webapi-svc
+  labels:
+    app: webapi
 spec:
   selector:
     app: webapi
   type: LoadBalancer
   ports:
-  - port: 8080
+  - name: web
+    port: 8080
     targetPort: 80
 
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: webapi
+  labels:
+    team: frontend
+    release: prometheus
+spec:
+  endpoints:
+  - path: /metrics
+    port: web
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: webapi
