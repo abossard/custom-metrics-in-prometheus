@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-func
+spec:
+  selector:
+    matchLabels:
+      app: hello-func
+  template:
+    metadata:
+      labels:
+        app: hello-func
+    spec:
+      containers:
+      - name: hello-func
+        image: anbossar.azurecr.io/prom-func-app:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-func-svc
+spec:
+  selector:
+    app: hello-func
+  type: LoadBalancer
+  ports:
+  - port: 8088
+    targetPort: 80
+
