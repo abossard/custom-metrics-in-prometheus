@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Prometheus;
 
 namespace webapi.Controllers;
 
@@ -6,6 +7,7 @@ namespace webapi.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
+    private static readonly Counter CallCounter = Metrics.CreateCounter("call_counter_weather_forecast", "weather forecast");
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -21,6 +23,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        CallCounter.Inc();
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),

@@ -9,7 +9,7 @@ func init --docker --csharp
 
 
 #CONFIG LOCAL
-POD=$(kubectl get pod -n prometheus -l app.kubernetes.io/name=grafana -o jsonpath='{.items[0].metadata.name}')
+POD=$(kubectl get pod -n default -l app.kubernetes.io/name=grafana -o jsonpath='{.items[0].metadata.name}')
 ACR=anbossar
 echo $POD
 kubectl port-forward -n prometheus $POD 3000
