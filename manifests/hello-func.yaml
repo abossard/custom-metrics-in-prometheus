@@ -26,11 +26,30 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hello-func-svc
+  labels:
+    app: hello-func
 spec:
   selector:
     app: hello-func
   type: LoadBalancer
   ports:
-  - port: 8088
+  - name: web
+    port: 8088
     targetPort: 80
-
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hello-func
+  labels:
+    team: frontend
+    release: prometheus
+spec:
+  endpoints:
+  - path: /api/metrics
+    port: web
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: hello-func

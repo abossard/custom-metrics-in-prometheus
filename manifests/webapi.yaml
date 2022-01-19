@@ -36,7 +36,6 @@ spec:
   - name: web
     port: 8080
     targetPort: 80
-
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
