@@ -8,6 +8,7 @@ namespace webapi.Controllers;
 public class WeatherForecastController : ControllerBase
 {
     private static readonly Counter CallCounter = Metrics.CreateCounter("call_counter_weather_forecast", "weather forecast");
+    private static readonly Counter NewCallCounter = Prometheus.Metrics.CreateCounter("call_counter_new", "new");
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -24,6 +25,7 @@ public class WeatherForecastController : ControllerBase
     public IEnumerable<WeatherForecast> Get()
     {
         CallCounter.Inc();
+        NewCallCounter.Inc();
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),

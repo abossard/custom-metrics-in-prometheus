@@ -14,6 +14,7 @@ namespace hello_func
     public static class Hello
     {
         private static readonly Counter CallCounter = Prometheus.Metrics.CreateCounter("call_counter_hello", "hello");
+        private static readonly Counter NewCallCounter = Prometheus.Metrics.CreateCounter("call_counter_new", "new");
         
         [FunctionName("hello")]
         public static async Task<IActionResult> Run(
@@ -24,6 +25,8 @@ namespace hello_func
 
             string name = req.Query["name"];
             CallCounter.Inc();
+
+            NewCallCounter.Inc();
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
