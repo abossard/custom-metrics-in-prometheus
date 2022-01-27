@@ -26,6 +26,9 @@ public class WeatherForecastController : ControllerBase
     {
         CallCounter.Inc();
         NewCallCounter.Inc();
+        _logger.LogInformation("Information, yes!!!!!");
+        _logger.LogWarning("Warning, yes!!!!!");
+        _logger.LogError("Error, yes!!!!!");
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),

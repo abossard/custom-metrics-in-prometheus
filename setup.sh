@@ -1,7 +1,10 @@
 #SETUP
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+
 helm repo update
 helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -f values.yaml
+helm upgrade --install loki grafana/loki-stack
 
 mkdir hello-func
 cd hello-func
@@ -27,5 +30,6 @@ az acr login -n $ACR
 az acr update --name anbossar --anonymous-pull-enabled
 
 cd webapi
+docker build -t anbossar.azurecr.io/prom-webapi:latest .
 docker buildx build --platform linux/amd64 -t anbossar.azurecr.io/prom-webapi:latest --push .
 az acr build --registry $ACR --image prom-webapi:latest .

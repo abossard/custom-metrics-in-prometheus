@@ -14,7 +14,7 @@ spec:
       containers:
       - name: webapi
         image: anbossar.azurecr.io/prom-webapi:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         resources:
           limits:
             memory: "128Mi"
@@ -48,6 +48,7 @@ spec:
   endpoints:
   - path: /metrics
     port: web
+    interval: 10s
   namespaceSelector:
     any: true
   selector:
