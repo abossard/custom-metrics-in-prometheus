@@ -33,3 +33,28 @@ cd webapi
 docker build -t anbossar.azurecr.io/prom-webapi:latest .
 docker buildx build --platform linux/amd64 -t anbossar.azurecr.io/prom-webapi:latest --push .
 az acr build --registry $ACR --image prom-webapi:latest .
+
+# ADDING LOKI
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm upgrade --install loki grafana/loki-stack
+# Grafana should autodetect it
+
+# update webapi/appsettings.json with service name of loki
+
+# done
+
+# WATCHMAN
+# update Makefile
+brew install watchman
+
+watchman-make -p \
+    'webapi/**/*.cs' \
+    'webapi/**/*.json' \
+    'webapi/Dockerfile' \
+     -t build-webapi \
+   -p \
+    'hello-func/**/*.cs' \
+    'hello-func/**/*.json' \
+    'hello-func/Dockerfile' \
+     -t build-hello-func
